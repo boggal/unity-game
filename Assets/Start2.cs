@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public class Start2 : MonoBehaviour
 {
@@ -20,22 +21,32 @@ public class Start2 : MonoBehaviour
 
     [SerializeField] private string busmove = "bus";
 
+
+    [SerializeField] private Animator cutsceneanimator;
+
+    [SerializeField] private string cutscenemove = "CutsceneFirst";
+
+
     [SerializeField] private CanvasGroup myFadingGroup;
 
-    void Start()
+    private IEnumerator Start()
     {
         int testvalue = 0;
         isFaded = !isFaded;
         myFadingGroup.DOFade(fadeInAmount, 0);
-        myFadingGroup.DOFade(fadeOutAmount, 1);
+        
         busanimator.Play(busmove, 0, 0.0f);
+        cutsceneanimator.Play(cutscenemove, 0, 0.0f);
+        yield return new WaitForSeconds(5);
+        cutsceneanimator.enabled = false;
+        myFadingGroup.DOFade(fadeOutAmount, 3);
     }
 
 private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Invis"))
         {
-        myFadingGroup.DOFade(fadeInAmount, 3);
+            SceneManager.LoadScene("School");
         }
     }
 
@@ -43,6 +54,6 @@ private void OnTriggerEnter(Collider other)
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
